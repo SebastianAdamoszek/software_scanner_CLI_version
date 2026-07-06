@@ -6,6 +6,7 @@ from inventory.console_ui import (
     show_header,
     show_no_filter_results,
     show_no_programs_found,
+    show_programs_table,
     show_saved_files,
     show_scan_start,
     show_success,
@@ -108,6 +109,7 @@ def main():
     show_summary(summary)
     show_filters(summary["filters"])
     show_top_publishers(summary)
+    show_programs_table(programs)
     show_saved_files(saved_files)
     show_success()
 

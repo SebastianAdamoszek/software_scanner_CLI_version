@@ -110,6 +110,51 @@ def show_saved_files(saved_files):
 def show_success():
     console.print("[bold green]Gotowe.[/bold green]")
 
+def show_programs_table(programs, limit=None):
+    """
+    Wyswietla liste programow w tabeli Rich.
+
+    limit=None -> pokaz wszystkie programy
+    limit=20   -> pokaz pierwsze 20
+    """
+
+    if not programs:
+        console.print("[yellow]Brak programow do wyswietlenia.[/yellow]")
+        return
+
+    table = Table(
+    title="Lista zainstalowanych programow",
+    border_style="cyan",
+    header_style="bold white",
+    show_lines=False,
+    row_styles=["", "dim"],
+)
+
+    table.add_column("Lp.", width=4, justify="right")
+    table.add_column("Program", min_width=35, overflow="fold")
+    table.add_column("Wersja", width=18)
+    table.add_column("Producent", min_width=25, overflow="fold")
+
+    rows = programs if limit is None else programs[:limit]
+
+    for index, program in enumerate(rows, start=1):
+
+        style = "on grey11" if index % 2 == 0 else "on grey19"
+
+        table.add_row(
+            str(index),
+            program["name"],
+            program["version"] or "-",
+            program["publisher"] or "-",
+        )
+
+    console.print(table)
+
+    if limit is not None and len(programs) > limit:
+        console.print(
+            f"[dim]Wyswietlono {limit} z {len(programs)} programow.[/dim]"
+        )
+
 
 def format_bool_pl(value):
     return "[green]TAK[/green]" if value else "[yellow]NIE[/yellow]"
