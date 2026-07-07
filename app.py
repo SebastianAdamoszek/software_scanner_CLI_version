@@ -2,6 +2,7 @@ import argparse
 from pathlib import Path
 
 from inventory.console_ui import (
+    browse_programs,
     show_header,
     show_menu,
     show_scan_start,
@@ -97,7 +98,7 @@ def run_scan(args):
     # =========================
     # OUTPUT (RICH)
     # =========================
-    show_programs_table(programs)
+    browse_programs(programs)
     show_summary(summary)
     show_top_publishers(summary)
     show_filters(summary["filters"])

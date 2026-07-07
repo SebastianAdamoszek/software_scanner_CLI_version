@@ -4,6 +4,7 @@ from rich.table import Table
 
 
 console = Console()
+PAGE_SIZE = 30
 
 
 # =========================
@@ -228,7 +229,7 @@ def show_filters(filter_info):
 # =========================
 # TOP PRODUCENCI
 # =========================
-def show_top_publishers(summary, limit=5):
+def show_top_publishers(summary, limit=30):
 
     top = summary.get(
         "top_publishers",
@@ -270,16 +271,13 @@ def show_top_publishers(summary, limit=5):
 # =========================
 # TABLE PROGRAMS
 # =========================
-def show_programs_table(programs, limit=30):
+def show_programs_table(programs, start_numbers=1):
 
     if not programs:
-
         console.print(
             "[yellow]Brak programów[/yellow]"
         )
-
         return
-
 
     table = Table(
         title="ZAINSTALOWANE PROGRAMY",
@@ -288,35 +286,12 @@ def show_programs_table(programs, limit=30):
         row_styles=["", "grey62"],
     )
 
+    table.add_column("LP", justify="right", width=4)
+    table.add_column("Program", overflow="fold", min_width=35)
+    table.add_column("Wersja", width=18)
+    table.add_column("Producent", overflow="fold", min_width=25)
 
-    table.add_column(
-        "LP",
-        justify="right",
-        width=4
-    )
-
-    table.add_column(
-        "Program",
-        overflow="fold",
-        min_width=35
-    )
-
-    table.add_column(
-        "Wersja",
-        width=18
-    )
-
-    table.add_column(
-        "Producent",
-        overflow="fold",
-        min_width=25
-    )
-
-
-    for i, p in enumerate(
-        programs[:limit],
-        start=1
-    ):
+    for i, p in enumerate(programs, start_numbers):
 
         table.add_row(
             str(i),
@@ -325,16 +300,46 @@ def show_programs_table(programs, limit=30):
             p.get("publisher") or "-"
         )
 
-
     console.print(table)
+    
 
+def browse_programs(programs):
+    if not programs:
+        console.print("[yellow]Brak programów.[/yellow]")
+        return
 
-    if len(programs) > limit:
+    page = 0
+
+    while True:
+
+        console.clear()
+
+        start = page * PAGE_SIZE
+        end = start + PAGE_SIZE
+
+        show_programs_table(programs[start:end],
+                            start_numbers=start + 1)
 
         console.print(
-            f"[grey62]Pokazano {limit} z {len(programs)}[/grey62]"
+            f"\nProgramy {start + 1}-{min(end, len(programs))} z {len(programs)}"
         )
 
+        console.print("[cyan][N][/cyan] Następna  "
+                      "[cyan][P][/cyan] Poprzednia  "
+                      "[cyan][Q][/cyan] Powrót")
+
+        choice = input("> ").strip().lower()
+
+        if choice == "n":
+            if end < len(programs):
+                page += 1
+
+        elif choice == "p":
+            if page > 0:
+                page -= 1
+
+        elif choice == "q":
+            break
 
 # =========================
 # FILES
