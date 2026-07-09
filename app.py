@@ -130,7 +130,7 @@ def menu():
             run_scan(args)
 
             input("\n✔ Skan zakończony. Naciśnij ENTER aby wrócić do menu...")
-            consoole.clear()
+            
 
         # =========================
         # SEARCH FILTER

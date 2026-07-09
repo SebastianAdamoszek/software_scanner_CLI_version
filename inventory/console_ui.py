@@ -1,6 +1,7 @@
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
+from rich.live import Live
 
 
 
@@ -294,9 +295,6 @@ def browse_programs(programs):
 
     while True:
 
-        console.clear()
-
-
         start = page * PAGE_SIZE
         end = start + PAGE_SIZE
 
@@ -371,7 +369,7 @@ def browse_programs(programs):
 
 
         elif choice == "q":
-            console.clear()
+            console.print("\n" * 10)
             break
 
 
